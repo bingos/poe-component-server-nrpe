@@ -1,0 +1,17 @@
+use strict;
+use inc::Module::Install;
+name 'POE-Component-Server-NRPE';
+author 'Chris Williams <chris@bingosnet.co.uk>';
+license 'perl';
+perl_version '5.006';
+version_from 'lib/POE/Component/Server/NRPE.pm';
+abstract_from 'lib/POE/Component/Server/NRPE.pm';
+build_requires 'Test::More' => 0.47;
+requires 'Carp' => 0;
+requires 'Socket' => 0;
+requires 'Net::Netmask' => 1.9015;
+requires 'Net::SSLeay' => 1.30;
+requires 'POE'    => 0.38;
+requires 'POE::Component::SSLify' => 0.15;
+requires 'POE::Component::Client::NRPE' => 0.12;
+WriteAll();
