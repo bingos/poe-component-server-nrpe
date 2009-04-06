@@ -1,6 +1,9 @@
 POE::Component::Server::NRPE - Changelog
 ========================================
 
+0.14	Mon Apr  6 21:50:55 BST 2009
+	- Bumped prereq version needed.
+
 0.12	Fri Feb 13 11:18:51 GMT 2009
 	- Added LICENSE details.
 

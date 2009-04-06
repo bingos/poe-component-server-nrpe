@@ -8,6 +8,7 @@ inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
+inc/Module/Install/Repository.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/POE/Component/Server/NRPE.pm
@@ -32,4 +33,3 @@ t/11_sess_no_out.t
 t/12_sess_time_out.t
 t/99_pod.t
 t/99_pod_coverage.t
-t/99_test_kwalitee.t
