@@ -1,6 +1,9 @@
 POE::Component::Server::NRPE - Changelog
 ========================================
 
+0.16	Wed Apr  8 12:21:25 BST 2009
+	- Make auto_set_repository() only run at author-time
+
 0.14	Mon Apr  6 21:50:55 BST 2009
 	- Bumped prereq version needed.
 

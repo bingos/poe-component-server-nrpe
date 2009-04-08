@@ -14,5 +14,5 @@ requires 'Net::SSLeay' => 1.30;
 requires 'POE'    => 1.004;
 requires 'POE::Component::SSLify' => 0.15;
 requires 'POE::Component::Client::NRPE' => 0.12;
-auto_set_repository;
+eval "auto_set_repository";
 WriteAll();

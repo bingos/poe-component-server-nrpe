@@ -11,7 +11,7 @@ use POE::Component::SSLify qw(Server_SSLify);
 use POE::Component::Server::NRPE::Constants;
 use vars qw($VERSION);
 
-$VERSION = '0.14';
+$VERSION = '0.16';
 
 sub spawn {
   my $package = shift;
