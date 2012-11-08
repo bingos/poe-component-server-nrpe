@@ -52,10 +52,10 @@ sub _launch {
 
 sub _response {
   my ($kernel,$heap,$res) = @_[KERNEL,HEAP,ARG0];
-  ok( $res->{context}->{thing} eq 'moo', 'Context data was okay' );
-  ok( $res->{version} eq '2', 'Response version' );
-  ok( $res->{result} eq '2', 'The result code was okay' );
-  ok( $res->{data} eq 'NRPE: Command timed out after 5 seconds', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'NRPE: Command timed out after 5 seconds'\n");
+  cmp_ok( $res->{context}->{thing}, 'eq', 'moo', 'Context data was okay' );
+  cmp_ok( $res->{version}, 'eq', '2', 'Response version' );
+  cmp_ok( $res->{result}, 'eq', '2', 'The result code was okay' );
+  cmp_ok( $res->{data}, 'eq', 'NRPE: Command timed out after 5 seconds', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'NRPE: Command timed out after 5 seconds'\n");
   $nrped->shutdown();
   return;
 }

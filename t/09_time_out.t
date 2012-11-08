@@ -30,7 +30,7 @@ sub _start {
   my ($kernel,$heap) = @_[KERNEL,HEAP];
   my $port = ( unpack_sockaddr_in $nrped->getsockname() )[0];
 
-  ok( $nrped->add_command( command => 'check_mofo', program => \&_coderef ), "Added a command handler okay" );
+  is( $nrped->add_command( command => 'check_mofo', program => \&_coderef ), 1, "Added a command handler okay" );
 
   my $check = POE::Component::Client::NRPE->check_nrpe(
 	host  => '127.0.0.1',
@@ -48,10 +48,10 @@ sub _start {
 
 sub _response {
   my ($kernel,$heap,$res) = @_[KERNEL,HEAP,ARG0];
-  ok( $res->{context}->{thing} eq 'moo', 'Context data was okay' );
-  ok( $res->{version} eq '2', 'Response version' );
-  ok( $res->{result} eq '3', 'The result code was okay' );
-  ok( $res->{data} eq 'NRPE: Command timed out after 10 seconds' ) or diag("Got '$res->{data}', expected 'NRPE: Command timed out after 10 seconds'\n");
+  cmp_ok( $res->{context}->{thing}, 'eq', 'moo', 'Context data was okay' );
+  cmp_ok( $res->{version}, 'eq', '2', 'Response version' );
+  cmp_ok( $res->{result}, 'eq', '3', 'The result code was okay' );
+  cmp_ok( $res->{data}, 'eq', 'NRPE: Command timed out after 10 seconds' ) or diag("Got '$res->{data}', expected 'NRPE: Command timed out after 10 seconds'\n");
   $nrped->shutdown();
   return;
 }
