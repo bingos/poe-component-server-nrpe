@@ -43,7 +43,7 @@ sub _start {
     );
   while(my ($state, $values) = each %tests) {
     $total++;
-    ok( $nrped->add_command( command => 'check_' . lc($state), program => \&_coderef, args => [ $state => $values->[0] ] ), "Added $state command handler" );
+    is( $nrped->add_command( command => 'check_' . lc($state), program => \&_coderef, args => [ $state => $values->[0] ] ), 1, "Added $state command handler" );
 
   my $check = POE::Component::Client::NRPE->check_nrpe(
 	host  => '127.0.0.1',
@@ -63,9 +63,9 @@ sub _response {
   my ($kernel,$heap,$res) = @_[KERNEL,HEAP,ARG0];
   ok( $res->{context}, 'Context data was okay' );
   my ($state, $values) = @{$res->{context}};
-  ok( $res->{version} eq '2', 'Response version' );
-  ok( $res->{result} eq $values->[1], "The result code was '$res->{result}', expected '$values->[1]'\n" );
-  ok( $res->{data} eq "$state mofo bleh" ) or diag("Got '$res->{data}', expected '$state mofo bleh'\n");
+  cmp_ok( $res->{version}, 'eq', '2', 'Response version' );
+  cmp_ok( $res->{result}, 'eq', $values->[1], "The result code was '$res->{result}', expected '$values->[1]'\n" );
+  cmp_ok( $res->{data}, 'eq', "$state mofo bleh" ) or diag("Got '$res->{data}', expected '$state mofo bleh'\n");
   $total--;
   $nrped->shutdown() if $total == 0;
   return;
