@@ -441,7 +441,7 @@ sub _sig_child {
 	$output = 'NRPE: Unable to read output';
     }
     $output = $pid->{timed_out} if $pid->{timed_out};
-    $return = $status;
+    $return = $status >> 8;
     $return = NRPE_STATE_UNKNOWN if $status < 0 or $status > 3;
     $self->_send_response( $pid->{client}, $return, $output );
   }
