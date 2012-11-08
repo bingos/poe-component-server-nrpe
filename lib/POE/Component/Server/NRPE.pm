@@ -442,7 +442,7 @@ sub _sig_child {
     }
     $output = $pid->{timed_out} if $pid->{timed_out};
     $return = $status >> 8;
-    $return = NRPE_STATE_UNKNOWN if $status < 0 or $status > 3;
+    $return = NRPE_STATE_UNKNOWN if $return < 0 or $return > 3;
     $self->_send_response( $pid->{client}, $return, $output );
   }
   return $kernel->sig_handled();
