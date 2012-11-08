@@ -31,7 +31,7 @@ sub _start {
 
   ok( $nrped->add_command( command => 'check_mofo', program => [ $^X, 'check_mofo.pl' ] ), "Added a command handler okay" );
 
-  my $check = POE::Component::Client::NRPE->check_nrpe( 
+  my $check = POE::Component::Client::NRPE->check_nrpe(
 	host  => '127.0.0.1',
 	port  => $port,
 	event => '_response',

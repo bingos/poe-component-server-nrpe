@@ -1,5 +1,7 @@
 package POE::Component::Server::NRPE;
 
+#ABSTRACT: A POE Component implementation of NRPE Daemon.
+
 use strict;
 use warnings;
 use Socket;
@@ -9,9 +11,6 @@ use Net::SSLeay qw(die_now);
 use POE qw(Wheel::SocketFactory Wheel::ReadWrite Wheel::Run Filter::Stream Filter::Line);
 use POE::Component::SSLify qw(Server_SSLify);
 use POE::Component::Server::NRPE::Constants;
-use vars qw($VERSION);
-
-$VERSION = '0.16';
 
 sub spawn {
   my $package = shift;
@@ -24,7 +23,7 @@ sub spawn {
 	next unless $acl->isa('Net::Netmask');
 	push @{ $opts{access} }, $acl;
   }
-  $opts{verstring} = __PACKAGE__ . ' ' . "v$VERSION" unless $opts{verstring};
+  $opts{verstring} = __PACKAGE__ . ' v' . $POE::Component::Server::NRPE::VERSION unless $opts{verstring};
   $opts{version} = 2 unless $opts{version} and $opts{version} eq '1';
   $opts{usessl} = 1 unless defined $opts{usessl} and $opts{usessl} eq '0';
   my $self = bless \%opts, $package;
@@ -180,7 +179,7 @@ sub return_result {
 sub _conn_exists {
   my ($self,$wheel_id) = @_;
   return 0 unless $wheel_id and defined $self->{clients}->{ $wheel_id };
-  return 1; 
+  return 1;
 }
 
 sub _disconnect {
@@ -210,7 +209,7 @@ sub _start {
   $self->{session_id} = $_[SESSION]->ID();
   if ( $self->{alias} ) {
 	$kernel->alias_set( $self->{alias} );
-  } 
+  }
   else {
 	$kernel->refcount_increment( $self->{session_id} => __PACKAGE__ );
   }
@@ -241,7 +240,7 @@ sub _shutdown {
   delete $self->{clients};
   delete $self->{wheels};
   delete $self->{pids};
-  $kernel->refcount_decrement( $_, __PACKAGE__ ) for 
+  $kernel->refcount_decrement( $_, __PACKAGE__ ) for
 	map { $self->{sess_cmds}->{$_}->{session} } keys %{ $self->{sess_cmds} };
   $kernel->alarm_remove_all();
   $kernel->alias_remove( $_ ) for $kernel->alias_list();
@@ -279,11 +278,11 @@ sub _accept_client {
   );
 
   return unless $wheel;
-  
+
   my $id = $wheel->ID();
-  $self->{clients}->{ $id } = 
-  { 
-				wheel    => $wheel, 
+  $self->{clients}->{ $id } =
+  {
+				wheel    => $wheel,
 				peeraddr => $peeraddr,
 				peerport => $peerport,
 				sockaddr => $sockaddr,
@@ -553,11 +552,8 @@ sub _SSLify_Initialise {
 }
 
 'POE it';
-__END__
 
-=head1 NAME
-
-POE::Component::Server::NRPE - A POE Component implementation of NRPE Daemon.
+=pod
 
 =head1 SYNOPSIS
 
@@ -567,7 +563,7 @@ POE::Component::Server::NRPE - A POE Component implementation of NRPE Daemon.
   use POE::Component::Server::NRPE::Constants qw(NRPE_STATE_OK);
 
   my $port = 5666;
-  
+
   my $nrped = POE::Component::Server::NRPE->spawn(
 	port => $port;
   );
@@ -669,7 +665,7 @@ Whenever clients request the given command, the component will send the indicate
   ARG0, a unique id of the client;
   ARG1, the context ( if any );
 
-Your session should then do any necessary processing and use C<return_result> event to return the status and output to the component. 
+Your session should then do any necessary processing and use C<return_result> event to return the status and output to the component.
 
 =item unregister_command
 
@@ -701,19 +697,6 @@ Due to problems with L<Net::SSLeay> mixing of client and server SSL is not encou
 
 Add a logging capability.
 
-=head1 AUTHOR
-
-Chris C<BinGOs> Williams <chris@bingosnet.co.uk>
-
-This module uses code derived from L<http://www.stic-online.de/stic/html/nrpe-generic.html>
-Copyright (C) 2006, 2007 STIC GmbH, http://www.stic-online.de
-
-=head1 LICENSE
-
-Copyright (C) Chris Williams and STIC GmbH
-
-This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
-
 =head1 SEE ALSO
 
 L<POE>
@@ -721,5 +704,10 @@ L<POE>
 L<POE::Component::SSLify>
 
 L<http://www.nagios.org/>
+
+=head1 KUDOS
+
+This module uses code derived from L<http://www.stic-online.de/stic/html/nrpe-generic.html>
+Copyright (C) 2006, 2007 STIC GmbH, http://www.stic-online.de
 
 =cut

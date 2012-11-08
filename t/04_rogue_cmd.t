@@ -29,7 +29,7 @@ sub _start {
   my ($kernel,$heap) = @_[KERNEL,HEAP];
   my $port = ( unpack_sockaddr_in $nrped->getsockname() )[0];
 
-  my $check = POE::Component::Client::NRPE->check_nrpe( 
+  my $check = POE::Component::Client::NRPE->check_nrpe(
 	host  => '127.0.0.1',
 	port  => $port,
 	event => '_response',
