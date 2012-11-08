@@ -31,6 +31,18 @@ POE::Component::Server::NRPE::Constants - Defines constants required by POE::Com
 
 POE::Component::Server::NRPE::Constants defines constants required by L<POE::Component::Server::NRPE>.
 
+=over 4
+
+=item NRPE_STATE_OK - The NRPE plugin found no error.
+
+=item NRPE_STATE_WARNING - The plugin detected a condition worthy of a warning.
+
+=item NRPE_STATE_CRITICAL - The plugin detected a critical condition.
+
+=item NRPE_STATE_UNKNOWN - Something else happened.  Used internally when the plugin couldn't be executed.
+
+=back
+
 =head1 AUTHOR
 
 Chris Williams <chris@bingosnet.co.uk>
