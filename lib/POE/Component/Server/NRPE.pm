@@ -434,14 +434,15 @@ sub _sig_child {
     $kernel->alarm_remove( $pid->{alarm_id} );
     my ( $return, $output );
     if ( $pid->{output} ) {
-	$output = $pid->{output};
+	    $output = $pid->{output};
     }
     else {
-	$output = 'NRPE: Unable to read output';
+	    $output = 'NRPE: Unable to read output';
     }
     $output = $pid->{timed_out} if $pid->{timed_out};
     $return = $status >> 8;
     $return = NRPE_STATE_UNKNOWN if $return < 0 or $return > 3;
+    $return = NRPE_STATE_UNKNOWN if $pid->{timed_out};
     $self->_send_response( $pid->{client}, $return, $output );
   }
   return $kernel->sig_handled();
