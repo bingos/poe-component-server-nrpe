@@ -47,10 +47,10 @@ sub _start {
 
 sub _response {
   my ($kernel,$heap,$res) = @_[KERNEL,HEAP,ARG0];
-  ok( $res->{context}->{thing} eq 'moo', 'Context data was okay' );
-  ok( $res->{version} eq '2', 'Response version' );
-  ok( $res->{result} eq '3', 'The result code was okay' );
-  ok( $res->{data} eq 'CHECK NRPE: Error receiving data from daemon.', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'CHECK NRPE: Error receiving data from daemon.'\n");
+  cmp_ok( $res->{context}->{thing}, 'eq', 'moo', 'Context data was okay' );
+  cmp_ok( $res->{version}, 'eq', '2', 'Response version' );
+  cmp_ok( $res->{result}, 'eq', '3', 'The result code was okay' );
+  cmp_ok( $res->{data}, 'eq', 'CHECK NRPE: Error receiving data from daemon.', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'CHECK NRPE: Error receiving data from daemon.'\n");
   $nrped->shutdown();
   return;
 }

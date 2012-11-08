@@ -41,10 +41,10 @@ sub _start {
 
 sub _response {
   my ($kernel,$heap,$res) = @_[KERNEL,HEAP,ARG0];
-  ok( $res->{context}->{thing} eq 'moo', 'Context data was okay' );
-  ok( $res->{version} eq '1', 'Response version' );
-  ok( $res->{result} eq '0', 'The result code was okay' );
-  ok( $res->{data} eq 'NRPE v1.9', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'NRPE v1.9'\n");
+  cmp_ok( $res->{context}->{thing}, 'eq', 'moo', 'Context data was okay' );
+  cmp_ok( $res->{version}, 'eq', '1', 'Response version' );
+  cmp_ok( $res->{result}, 'eq', '0', 'The result code was okay' );
+  cmp_ok( $res->{data}, 'eq', 'NRPE v1.9', 'And the data was cool' ) or diag("Got '$res->{data}', expected 'NRPE v1.9'\n");
   $nrped->shutdown();
   return;
 }
