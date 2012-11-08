@@ -441,7 +441,7 @@ sub _sig_child {
 	$output = 'NRPE: Unable to read output';
     }
     $output = $pid->{timed_out} if $pid->{timed_out};
-    $return = $status;
+    $return = $status >> 8;
     $return = NRPE_STATE_UNKNOWN if $status < 0 or $status > 3;
     $self->_send_response( $pid->{client}, $return, $output );
   }
@@ -564,6 +564,7 @@ POE::Component::Server::NRPE - A POE Component implementation of NRPE Daemon.
   use strict;
   use POE;
   use POE::Component::Server::NRPE;
+  use POE::Component::Server::NRPE::Constants qw(NRPE_STATE_OK);
 
   my $port = 5666;
   
@@ -571,14 +572,14 @@ POE::Component::Server::NRPE - A POE Component implementation of NRPE Daemon.
 	port => $port;
   );
 
-  $nrped->add_command( command => meep, program => \&_meep );
+  $nrped->add_command( command => 'meep', program => \&_meep );
 
   $poe_kernel->run();
   exit 0;
 
   sub _meep {
-    print STDOUT "OK meep\n";
-    return 0;
+	print STDOUT "OK meep\n";
+	exit NRPE_STATE_OK;
   }
 
 =head1 DESCRIPTION
@@ -631,9 +632,14 @@ This will add a command that can be run. Takes a number of parameters:
   'program', the program to run. Can be a coderef, mandatory;
   'args', the command line arguments to pass to the above program, must be an arrayref;
 
-Returns 1 if successful, undef otherwise.
+The 'command' should behave like an NRPE plugin: It should print a
+status message to STDOUT and exit() with the test's outcome.
+POE::Component::Server::NRPE::Constants defines constants for the
+valid exit() values.
 
-=item del_command 
+add_command() eturns 1 if successful, undef otherwise.
+
+=item del_command
 
 Removes a previously defined command. Takes one argument, the previously defined label to remove.
 
