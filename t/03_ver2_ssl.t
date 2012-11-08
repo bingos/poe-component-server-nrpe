@@ -9,8 +9,6 @@ use_ok( 'POE::Component::Server::NRPE' );
 use Socket;
 use POE qw(Wheel::SocketFactory Filter::Stream Component::Client::NRPE);
 
-$SIG{CHLD} = 'IGNORE';
-
 my $port = 5666;
 my $nrped;
 
@@ -32,6 +30,7 @@ if ($pid)  # we are parent
     POE::Session->create(
 	inline_states => {
 		_start => sub {
+        $poe_kernel->sig_child( $pid, '_dummy' );
   		  POE::Component::Client::NRPE->check_nrpe(
 			host  => '127.0.0.1',
 			port  => $port,
@@ -54,10 +53,14 @@ if ($pid)  # we are parent
         }
   		  return;
 		},
+    _dummy => sub {
+        my( $heap, $sig, $pid, $exit_val, $details ) = @_[ HEAP, ARG0..ARG3 ];
+        diag( "$$: Child $pid exited" );
+    },
 	},
     );
 
-    $poe_kernel->run();
+    #$poe_kernel->run();
 }
 
 ####################################################################
@@ -91,7 +94,8 @@ else  # we are the child
 	},
   );
 
-  $poe_kernel->run();
+  #$poe_kernel->run();
 }
 
+$poe_kernel->run();
 exit 0;
