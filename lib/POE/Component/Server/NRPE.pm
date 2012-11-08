@@ -632,9 +632,14 @@ This will add a command that can be run. Takes a number of parameters:
   'program', the program to run. Can be a coderef, mandatory;
   'args', the command line arguments to pass to the above program, must be an arrayref;
 
-Returns 1 if successful, undef otherwise.
+The 'command' should behave like an NRPE plugin: It should print a
+status message to STDOUT and exit() with the test's outcome.
+POE::Component::Server::NRPE::Constants defines constants for the
+valid exit() values.
 
-=item del_command 
+add_command() eturns 1 if successful, undef otherwise.
+
+=item del_command
 
 Removes a previously defined command. Takes one argument, the previously defined label to remove.
 
